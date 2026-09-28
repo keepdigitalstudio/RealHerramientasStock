@@ -3,11 +3,13 @@
 Control de stock único para los dos canales de venta (Mercado Libre y la web propia).
 Next.js + TypeScript + Tailwind, con Google Sheets como base de datos y deploy en Vercel.
 
+Producción: https://real-herramientas-stock.vercel.app
+
 ## Estado
 
 | Etapa | Contenido | Estado |
 |---|---|---|
-| 1 | Proyecto base, repo y deploy en Vercel | En curso |
+| 1 | Proyecto base, repo y deploy en Vercel | Lista |
 | 2 | Conexión con el Sheet e importación del relevamiento | Pendiente |
 | 3 | Panel de stock y registro de movimientos | Pendiente |
 | 4 | Dashboard de métricas | Pendiente |
