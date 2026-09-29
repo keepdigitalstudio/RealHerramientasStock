@@ -27,7 +27,7 @@ export function ExportMenu() {
       <summary className="cursor-pointer list-none rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm hover:bg-neutral-100">
         Exportar
       </summary>
-      <div className="absolute right-0 z-20 mt-2 w-72 space-y-4 rounded-lg border border-neutral-200 bg-white p-4 shadow-lg">
+      <div className="absolute right-0 z-20 mt-2 w-[22rem] space-y-4 max-sm:fixed max-sm:inset-x-4 max-sm:top-28 max-sm:w-auto rounded-lg border border-neutral-200 bg-white p-4 shadow-lg">
         <a
           href="/api/export/stock"
           onClick={close}
