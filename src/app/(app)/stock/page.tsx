@@ -1,10 +1,15 @@
 import Link from "next/link";
+import type { Estado } from "@/lib/stock/constants";
 import { readProducts, withEstado } from "@/lib/stock/products";
 import { StockTable } from "./stock-table";
 
 export const dynamic = "force-dynamic";
 
-export default async function StockPage() {
+const ESTADOS: Estado[] = ["ok", "bajo", "sin_stock"];
+
+export default async function StockPage({ searchParams }: PageProps<"/stock">) {
+  const estadoParam = (await searchParams).estado;
+  const estado = ESTADOS.find((e) => e === estadoParam) ?? "";
   const products = (await readProducts()).map(withEstado);
 
   return (
@@ -18,7 +23,7 @@ export default async function StockPage() {
           Nuevo producto
         </Link>
       </div>
-      <StockTable products={products} />
+      <StockTable products={products} initialEstado={estado} />
     </section>
   );
 }

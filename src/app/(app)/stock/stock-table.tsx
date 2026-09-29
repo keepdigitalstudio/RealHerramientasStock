@@ -14,9 +14,15 @@ type Group = { key: string; titulo: string | null; items: ProductWithEstado[] };
 type Sort = { key: SortKey; dir: 1 | -1 };
 type OnMove = (p: ProductWithEstado, t: Tipo) => void;
 
-export function StockTable({ products }: { products: ProductWithEstado[] }) {
+export function StockTable({
+  products,
+  initialEstado = "",
+}: {
+  products: ProductWithEstado[];
+  initialEstado?: Estado | "";
+}) {
   const [q, setQ] = useState("");
-  const [estado, setEstado] = useState<Estado | "">("");
+  const [estado, setEstado] = useState<Estado | "">(initialEstado);
   const [marca, setMarca] = useState("");
   const [inactivos, setInactivos] = useState(false);
   const [agrupar, setAgrupar] = useState(false);

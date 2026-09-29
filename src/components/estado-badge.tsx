@@ -1,9 +1,10 @@
 import { ESTADO_LABEL, type Estado } from "@/lib/stock/constants";
 
+// Paleta de estado (fija): siempre acompañada del texto, nunca el color solo.
 const DOT: Record<Estado, string> = {
-  ok: "bg-emerald-500",
-  bajo: "bg-amber-500",
-  sin_stock: "bg-red-500",
+  ok: "bg-[#0ca30c]",
+  bajo: "bg-[#fab219]",
+  sin_stock: "bg-[#d03b3b]",
 };
 
 export function EstadoBadge({ estado }: { estado: Estado }) {

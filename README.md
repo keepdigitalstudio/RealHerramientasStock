@@ -12,7 +12,7 @@ Producción: https://real-herramientas-stock.vercel.app
 | 1 | Proyecto base, repo y deploy en Vercel | Lista |
 | 2 | Conexión con el Sheet e importación del relevamiento | Lista |
 | 3 | Panel de stock y registro de movimientos | Lista |
-| 4 | Dashboard de métricas | Pendiente |
+| 4 | Dashboard de métricas | Lista |
 | 5 | Exportación a Excel, login y ajustes finales | Pendiente |
 
 ## Instalación local
@@ -38,13 +38,13 @@ Otros comandos:
 ```
 src/
   app/
-    (app)/dashboard/   panel de métricas
+    (app)/dashboard/   panel de métricas y gráficos
     (app)/stock/       tabla de stock, detalle con historial, alta y edición
     (app)/importar/    carga inicial del relevamiento
   components/          componentes de UI
   lib/sheets/          cliente de Google Sheets y estructura de las pestañas
   lib/import/          lectura y validación del relevamiento, y carga inicial
-  lib/stock/           productos, movimientos, estados y anulaciones
+  lib/stock/           productos, movimientos, estados, anulaciones y métricas
   proxy.ts             protección temporal con usuario y contraseña
 scripts/               crear el Sheet, generar Excel de prueba, armar .env.local
 samples/               Excel de prueba con datos ficticios
@@ -127,6 +127,33 @@ cubren los casos que pasan con un solo usuario:
 
 Si más adelante la usan varias personas al mismo tiempo, conviene sumar un candado por SKU
 (por ejemplo con Upstash Redis) en `registerMovement`.
+
+## Dashboard
+
+Arriba, el **stock de hoy** (productos activos, unidades, bajo el mínimo, sin stock; las dos
+últimas tarjetas abren la tabla ya filtrada). Debajo, un **período** (7 / 30 / 90 días o 1 año)
+que aplica a todo lo demás:
+
+- **Ventas** del período, total y por canal, comparadas con el período anterior.
+- **Gráficos:** ventas por canal y ingresos/egresos en el tiempo (por día, semana o mes según el
+  período), los 10 más vendidos por canal y el stock por marca. Cada uno tiene tooltip y una
+  tabla con los números ("Ver tabla").
+- **Insights** automáticos: solo aparecen cuando hay datos que los respalden (variación de
+  ventas, canal dominante, productos que se agotan en una semana, más vendidos bajo el mínimo,
+  concentración de ventas, día de la semana destacado, stock inmovilizado, productos sin mínimo).
+- **Se agotan pronto:** días de cobertura = stock ÷ ventas por día de los últimos 30 días (o de
+  los días de historial, si hay menos). Se listan los que se agotan en 30 días o menos.
+- **Stock inmovilizado:** productos con stock y sin egresos en los últimos 90 días. Se calcula
+  recién con 90 días de historial (si no, el día de la importación todo figuraría como parado).
+- **Últimos movimientos.**
+
+Criterios: los movimientos anulados y sus anulaciones no cuentan; ventas = egresos con motivo
+venta (sin restar devoluciones); el stock inicial no entra en el gráfico de ingresos/egresos.
+Los cálculos están en `src/lib/stock/metrics.ts` (función pura, sin acceso al Sheet).
+
+Colores: Mercado Libre azul y web naranja en todo el dashboard; ingresos violeta y egresos aqua;
+estados con la paleta de estado y siempre con texto. La paleta se validó para daltonismo y
+contraste.
 
 ## Deploy en Vercel
 

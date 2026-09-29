@@ -64,3 +64,19 @@ Productos
 - [ ] Alta con un SKU existente (aunque cambien mayúsculas o espacios) muestra un error.
 - [ ] Alta con stock inicial: aparece en la tabla y su historial tiene el movimiento "Stock inicial".
 - [ ] Dar de baja: desaparece de la tabla (aparece con "Ver dados de baja") y no permite movimientos.
+
+## Etapa 4 — Dashboard
+
+- [ ] "Stock hoy" coincide con la tabla de Stock (productos activos, unidades, bajo el mínimo,
+      sin stock). Al tocar "Bajo el mínimo" o "Sin stock" se abre la tabla filtrada.
+- [ ] Al cambiar el período (7 / 30 / 90 días / 1 año) cambian las fechas, las ventas y los
+      gráficos; la tarjeta "Stock hoy" no cambia.
+- [ ] Registrar una venta por Mercado Libre y otra por web: suben "Unidades vendidas", las
+      tarjetas de cada canal, la barra del día en "Ventas por canal" y "Más vendidos".
+- [ ] Anular una de esas ventas: deja de contar en todas las métricas.
+- [ ] Un ingreso por compra aparece en "Ingresos y egresos"; el stock inicial de la importación no.
+- [ ] Al pasar el mouse (o tocar en el celular) una barra o la línea, el tooltip muestra los valores.
+- [ ] "Ver tabla" en cada gráfico muestra los mismos números.
+- [ ] Con pocos días de historial: "Se agotan pronto" avisa que la estimación todavía no es
+      confiable y "Stock inmovilizado" indica desde qué fecha se calcula.
+- [ ] En el celular todo se lee en una columna y no hay desplazamiento lateral.
