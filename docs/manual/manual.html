@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<title>Manual de uso — Real Herramientas Stock</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 18mm 16mm 20mm; }
+  :root { --verde: #0d5b3a; --verde-claro: #eaf3ee; --tinta: #1f1f1f; --gris: #5a5a5a; --linea: #e3e3e3; }
+  * { box-sizing: border-box; }
+  body { font-family: Montserrat, system-ui, sans-serif; color: var(--tinta); font-size: 10pt; line-height: 1.55; margin: 0; }
+  h1, h2, .display { font-family: "Bebas Neue", sans-serif; font-weight: 400; color: var(--verde); letter-spacing: .02em; line-height: 1; }
+  h1 { font-size: 30pt; margin: 0 0 6mm; padding-bottom: 3mm; border-bottom: 2px solid var(--verde); }
+  h1 .num { color: #9bb8a9; margin-right: 3mm; }
+  h2 { font-size: 17pt; margin: 7mm 0 2mm; break-after: avoid; }
+  h3 { break-after: avoid; }
+  h3 { font-size: 10.5pt; margin: 5mm 0 1.5mm; }
+  p { margin: 0 0 2.5mm; }
+  ul, ol { margin: 0 0 3mm; padding-left: 5mm; }
+  li { margin-bottom: 1mm; }
+  b, strong { font-weight: 600; }
+  .chapter { break-before: page; }
+  .keep { break-inside: avoid; }
+  figure { margin: 3mm 0 5mm; break-inside: avoid; }
+  figure img { display: block; max-width: 100%; border: 1px solid var(--linea); border-radius: 6px; }
+  figcaption { font-size: 8.5pt; color: var(--gris); margin-top: 1.5mm; }
+  .row { display: flex; gap: 6mm; align-items: flex-start; }
+  .row > * { flex: 1; }
+  .phone img { max-width: 58mm; margin: 0 auto; }
+  .login img { max-width: 48mm; }
+  table { width: 100%; border-collapse: collapse; margin: 2mm 0 4mm; font-size: 9pt; break-inside: avoid; }
+  th { background: var(--verde); color: #fff; text-align: left; font-weight: 600; padding: 1.8mm 2.5mm; }
+  td { padding: 1.8mm 2.5mm; border-bottom: 1px solid var(--linea); vertical-align: top; }
+  tr:nth-child(even) td { background: #fafafa; }
+  .c { text-align: center; }
+  .tip, .warn { border-radius: 6px; padding: 3mm 4mm; margin: 3mm 0 4mm; break-inside: avoid; }
+  .tip { background: var(--verde-claro); border-left: 3px solid var(--verde); }
+  .warn { background: #fff6e0; border-left: 3px solid #e0a100; }
+  .tip b:first-child, .warn b:first-child { display: block; margin-bottom: .5mm; }
+  .steps { counter-reset: s; list-style: none; padding: 0; }
+  .steps li { counter-increment: s; position: relative; padding-left: 8mm; margin-bottom: 2mm; }
+  .steps li::before { content: counter(s); position: absolute; left: 0; top: .2mm; width: 5.2mm; height: 5.2mm; border-radius: 50%; background: var(--verde); color: #fff; font-size: 8pt; font-weight: 600; text-align: center; line-height: 5.2mm; }
+  .dot { display: inline-block; width: 2.4mm; height: 2.4mm; border-radius: 50%; margin-right: 1mm; vertical-align: middle; }
+  .sw { display: inline-block; width: 2.6mm; height: 2.6mm; border-radius: 1px; margin-right: 1mm; vertical-align: middle; }
+  code, .mono { font-family: Consolas, "Courier New", monospace; font-size: 9pt; background: #f2f2f2; padding: .2mm 1mm; border-radius: 3px; }
+  .muted { color: var(--gris); }
+
+  /* Portada */
+  .cover { height: 297mm; display: flex; flex-direction: column; justify-content: space-between; background: var(--verde); color: #fff; margin: 0; padding: 34mm 24mm 22mm; }
+  .cover img { width: 34mm; }
+  .cover .brand { font-family: "Bebas Neue"; font-size: 62pt; line-height: .9; margin-top: 8mm; }
+  .cover .brand2 { font-weight: 700; letter-spacing: .5em; font-size: 11pt; margin-top: 2mm; }
+  .cover .title { font-family: "Bebas Neue"; font-size: 40pt; line-height: 1; margin-top: 26mm; }
+  .cover .sub { font-size: 12pt; opacity: .85; max-width: 120mm; margin-top: 4mm; }
+  .cover .foot { font-size: 9pt; opacity: .8; border-top: 1px solid rgba(255,255,255,.3); padding-top: 4mm; display: flex; justify-content: space-between; }
+
+  /* Índice */
+  .toc { list-style: none; padding: 0; margin-top: 4mm; }
+  .toc li { display: flex; align-items: baseline; gap: 3mm; padding: 2.4mm 0; border-bottom: 1px solid var(--linea); font-size: 11pt; }
+  .toc .n { font-family: "Bebas Neue"; color: var(--verde); font-size: 16pt; width: 9mm; }
+  .toc .d { color: var(--gris); font-size: 9pt; margin-left: auto; text-align: right; }
+  body.part-cover > section:not(.cover) { display: none; }
+  body.part-body > section.cover { display: none; }
+  body.part-body > section.chapter:first-of-type { break-before: auto; }
+</style>
+<script>document.documentElement.dataset.part = new URLSearchParams(location.search).get("part") || "";
+addEventListener("DOMContentLoaded", () => { const p = document.documentElement.dataset.part; if (p) document.body.classList.add("part-" + p); });</script>
+</head>
+<body>
+
+<!-- ================= PORTADA ================= -->
+<section class="cover">
+  <div>
+    <img src="img/isotipo-blanco.png" alt="">
+    <div class="brand">REAL</div>
+    <div class="brand2">HERRAMIENTAS</div>
+    <div class="title">Manual de uso<br>Control de stock</div>
+    <div class="sub">Cómo funciona la web app de stock, qué hace cada pantalla y cómo usarla en el día a día.</div>
+  </div>
+  <div class="foot">
+    <span>real-herramientas-stock.vercel.app</span>
+    <span>Versión 1 · Septiembre 2026</span>
+  </div>
+</section>
+
+<!-- ================= ÍNDICE ================= -->
+<section class="chapter">
+  <h1>Contenido</h1>
+  <ol class="toc">
+    <li><span class="n">1</span>Qué es y para qué sirve<span class="d">Un stock único para Mercado Libre y la web</span></li>
+    <li><span class="n">2</span>Ingresar y permisos<span class="d">Login, roles admin y operador</span></li>
+    <li><span class="n">3</span>La pantalla de Stock<span class="d">Tabla, estados, búsqueda y filtros</span></li>
+    <li><span class="n">4</span>Registrar movimientos<span class="d">Ingresos, egresos, ventas y confirmaciones</span></li>
+    <li><span class="n">5</span>Historial y anulaciones<span class="d">Cómo corregir un error</span></li>
+    <li><span class="n">6</span>Productos<span class="d">Alta, edición, variantes y bajas</span></li>
+    <li><span class="n">7</span>Dashboard<span class="d">Métricas, gráficos e insights</span></li>
+    <li><span class="n">8</span>Exportar a Excel<span class="d">Stock y movimientos</span></li>
+    <li><span class="n">9</span>Importar el relevamiento<span class="d">Carga inicial del stock</span></li>
+    <li><span class="n">10</span>Usuarios<span class="d">Altas y contraseñas</span></li>
+    <li><span class="n">11</span>Buenas prácticas y preguntas frecuentes</li>
+  </ol>
+</section>
+
+<!-- ================= 1 ================= -->
+<section class="chapter">
+  <h1><span class="num">1</span>Qué es y para qué sirve</h1>
+  <p>Real Herramientas Stock es la herramienta para llevar <b>un único stock por producto</b>, compartido por los dos canales de venta: <b>Mercado Libre</b> y la <b>página web</b>. Si un producto se vende por cualquiera de los dos, se descuenta del mismo número.</p>
+  <p>Todo lo que entra y sale del depósito se registra como un <b>movimiento</b>. El stock de cada producto es el resultado de esos movimientos, y el historial nunca se borra: siempre se puede ver quién hizo qué y cuándo.</p>
+
+  <h2>Qué se puede hacer</h2>
+  <ul>
+    <li><b>Ver el stock</b> de todos los productos, con un estado que avisa cuándo algo está bajo el mínimo o sin stock.</li>
+    <li><b>Registrar ingresos y egresos</b>: compras, reposiciones, devoluciones, ventas por canal, roturas, pérdidas y ajustes.</li>
+    <li><b>Consultar el historial</b> de cada producto y <b>anular</b> un movimiento cargado por error.</li>
+    <li><b>Dar de alta y editar productos</b>, con sus variantes y los IDs de publicación en Mercado Libre y en la web.</li>
+    <li><b>Seguir el negocio en el Dashboard</b>: ventas por canal, más vendidos, productos que se agotan pronto y mercadería parada.</li>
+    <li><b>Exportar a Excel</b> el stock actual o los movimientos de un período.</li>
+    <li><b>Importar el relevamiento</b> físico del depósito como punto de partida.</li>
+  </ul>
+
+  <h2>Dónde se usa</h2>
+  <p>Se entra desde cualquier navegador en <b>real-herramientas-stock.vercel.app</b>, tanto en la computadora como en el celular. En pantallas chicas la tabla de stock se transforma en tarjetas para que sea cómoda de usar con una mano.</p>
+  <div class="tip"><b>Consejo para el celular</b>Agregá la página a la pantalla de inicio (en el navegador: <i>Compartir → Agregar a inicio</i> o <i>⋮ → Agregar a la pantalla principal</i>). Queda como una app más, con el ícono de Real Herramientas.</div>
+
+  <h2>Dónde se guardan los datos</h2>
+  <p>La información vive en una planilla de Google Sheets propia ("Real Herramientas Stock – Datos"), con cuatro pestañas: <b>Productos</b>, <b>Movimientos</b>, <b>Stock_inicial</b> y <b>Usuarios</b>.</p>
+  <div class="warn"><b>Importante</b>No edites esa planilla a mano. Todo cambio de stock tiene que hacerse desde la app, para que quede registrado en el historial y los números cierren.</div>
+</section>
+
+<!-- ================= 2 ================= -->
+<section class="chapter">
+  <h1><span class="num">2</span>Ingresar y permisos</h1>
+  <div class="row">
+    <div>
+      <h2 style="margin-top:0">Ingresar</h2>
+      <ol class="steps">
+        <li>Abrí <b>real-herramientas-stock.vercel.app</b>.</li>
+        <li>Escribí tu <b>usuario o email</b> (no importan mayúsculas ni espacios de más) y tu <b>contraseña</b>.</li>
+        <li>Tocá <b>Ingresar</b>. Si habías abierto un enlace a una pantalla puntual, la app te lleva directo ahí.</li>
+      </ol>
+      <p>La sesión dura <b>30 días</b> en ese dispositivo. Para cerrarla, tocá <b>Salir</b> arriba a la derecha, junto a tu nombre y tu rol.</p>
+      <div class="tip"><b>¿Olvidaste la contraseña?</b>Pedile a un admin que te asigne una nueva desde la pantalla <b>Usuarios</b>.</div>
+    </div>
+    <figure class="phone login"><img src="img/login-cel.png" alt=""><figcaption>Pantalla de ingreso en el celular.</figcaption></figure>
+  </div>
+
+  <div class="keep"><h2>Roles</h2>
+  <p>Hay dos roles. El nombre de cada usuario es el que queda registrado en cada movimiento que carga.</p>
+  <table>
+    <tr><th>Acción</th><th class="c">Admin</th><th class="c">Operador</th></tr>
+    <tr><td>Ver stock, historial y dashboard</td><td class="c">✔</td><td class="c">✔</td></tr>
+    <tr><td>Registrar y anular movimientos</td><td class="c">✔</td><td class="c">✔</td></tr>
+    <tr><td>Exportar a Excel</td><td class="c">✔</td><td class="c">✔</td></tr>
+    <tr><td>Dejar el stock en negativo</td><td class="c">✔</td><td class="c">—</td></tr>
+    <tr><td>Dar de alta y editar productos</td><td class="c">✔</td><td class="c">—</td></tr>
+    <tr><td>Importar el relevamiento</td><td class="c">✔</td><td class="c">—</td></tr>
+    <tr><td>Gestionar usuarios y contraseñas</td><td class="c">✔</td><td class="c">—</td></tr>
+  </table></div>
+  <p>El operador ve en el menú solo <b>Dashboard</b> y <b>Stock</b>. El admin ve además <b>Importar</b> y <b>Usuarios</b>.</p>
+</section>
+
+<!-- ================= 3 ================= -->
+<section class="chapter">
+  <h1><span class="num">3</span>La pantalla de Stock</h1>
+  <p>Es la pantalla principal para el trabajo diario: muestra todos los productos con su stock actual.</p>
+  <figure><img src="img/stock.png" alt=""><figcaption>Tabla de stock en la computadora.</figcaption></figure>
+
+  <h2>Columnas</h2>
+  <table>
+    <tr><th style="width:26%">Columna</th><th>Qué muestra</th></tr>
+    <tr><td>SKU</td><td>Código único del producto. Tocándolo se abre el detalle con su historial.</td></tr>
+    <tr><td>Producto</td><td>Descripción y marca.</td></tr>
+    <tr><td>Stock</td><td>Unidades disponibles hoy, sumando los dos canales.</td></tr>
+    <tr><td>Mínimo</td><td>Stock mínimo deseado. Un guion significa que no está cargado.</td></tr>
+    <tr><td>Estado</td><td>Semáforo discreto (ver abajo).</td></tr>
+    <tr><td>+ Ingreso / − Egreso</td><td>Botones para registrar un movimiento rápido de ese producto.</td></tr>
+  </table>
+
+  <h2>Estados</h2>
+  <table>
+    <tr><th style="width:26%">Estado</th><th>Cuándo aparece</th></tr>
+    <tr><td><span class="dot" style="background:#0ca30c"></span>OK</td><td>El stock está por encima del mínimo (o no hay mínimo cargado y hay stock).</td></tr>
+    <tr><td><span class="dot" style="background:#fab219"></span>Bajo</td><td>Hay un mínimo cargado y el stock llegó a ese número o menos. Es momento de reponer.</td></tr>
+    <tr><td><span class="dot" style="background:#d03b3b"></span>Sin stock</td><td>El stock es 0 o menos.</td></tr>
+  </table>
+  <div class="tip"><b>Cargá el stock mínimo</b>Si un producto no tiene mínimo, la app no puede avisarte cuando está bajo. Se carga desde <i>Editar producto</i> (admin).</div>
+
+  <h2>Buscar, filtrar y ordenar</h2>
+  <ul>
+    <li><b>Buscar:</b> por SKU, descripción, marca o ubicación. Se pueden combinar palabras: "mecha 8" encuentra "Mecha acero rápido 8 mm".</li>
+    <li><b>Filtros:</b> por estado (OK, Bajo, Sin stock) y por marca.</li>
+    <li><b>Ordenar:</b> tocando el encabezado de una columna. Tocando de nuevo se invierte el orden.</li>
+    <li><b>Agrupar variantes:</b> junta los productos que comparten "producto base" (por ejemplo, todas las medidas de una misma mecha) y muestra el stock total del grupo.</li>
+    <li><b>Ver dados de baja:</b> muestra también los productos que ya no se trabajan.</li>
+  </ul>
+  <figure><img src="img/stock-agrupado.png" alt=""><figcaption>Con "Agrupar variantes", las medidas de la mecha aparecen juntas con su total.</figcaption></figure>
+</section>
+
+<section class="keep">
+  <h2>En el celular</h2>
+  <div class="row">
+    <div>
+      <p>En pantallas chicas cada producto se muestra como una tarjeta con su SKU, descripción, stock, mínimo, estado y los botones <b>+ Ingreso</b> y <b>− Egreso</b>.</p>
+      <p>Tocando el nombre del producto se abre su detalle.</p>
+      <p>Los filtros y la búsqueda funcionan igual que en la computadora.</p>
+    </div>
+    <figure class="phone"><img src="img/stock-cel.png" alt=""><figcaption>Stock en el celular.</figcaption></figure>
+  </div>
+</section>
+
+<!-- ================= 4 ================= -->
+<section class="chapter">
+  <h1><span class="num">4</span>Registrar movimientos</h1>
+  <p>Cada vez que entra o sale mercadería, se registra un movimiento. Es la única forma de cambiar el stock.</p>
+  <div class="row">
+    <div>
+      <h2 style="margin-top:0">Paso a paso</h2>
+      <ol class="steps">
+        <li>En la fila del producto (o en su detalle) tocá <b>+ Ingreso</b> o <b>− Egreso</b>. Se puede cambiar de tipo dentro de la ventana.</li>
+        <li>Elegí el <b>motivo</b>.</li>
+        <li>Si es una <b>venta</b>, elegí el <b>canal</b>: Mercado Libre o Web.</li>
+        <li>Escribí la <b>cantidad</b> y, si querés, una <b>nota</b> (por ejemplo, el número de venta).</li>
+        <li>Revisá la línea <b>Stock después</b>: muestra cómo va a quedar.</li>
+        <li>Tocá <b>Guardar</b>. La tabla se actualiza al instante.</li>
+      </ol>
+    </div>
+    <figure style="flex:.9"><img src="img/dialog-egreso.png" alt=""><figcaption>Registrar la venta de 2 unidades por Mercado Libre.</figcaption></figure>
+  </div>
+
+  <h2>Motivos</h2>
+  <table>
+    <tr><th style="width:18%">Tipo</th><th style="width:22%">Motivo</th><th>Cuándo usarlo</th></tr>
+    <tr><td rowspan="4">Ingreso</td><td>Compra</td><td>Llega mercadería comprada a un proveedor.</td></tr>
+    <tr><td>Reposición</td><td>Vuelve stock que estaba en otro lugar o se repone un faltante.</td></tr>
+    <tr><td>Devolución</td><td>Un cliente devuelve un producto. Se puede indicar el canal (opcional).</td></tr>
+    <tr><td>Ajuste</td><td>Un recuento encontró más unidades de las registradas.</td></tr>
+    <tr><td rowspan="4">Egreso</td><td>Venta</td><td>Se vendió por Mercado Libre o por la web. El canal es obligatorio.</td></tr>
+    <tr><td>Rotura</td><td>Producto dañado que ya no se puede vender.</td></tr>
+    <tr><td>Pérdida</td><td>Faltante que no aparece.</td></tr>
+    <tr><td>Ajuste</td><td>Un recuento encontró menos unidades de las registradas.</td></tr>
+  </table>
+  <p class="muted">Cada movimiento guarda automáticamente la fecha y hora, el usuario, el stock anterior y el stock resultante.</p>
+</section>
+
+<section class="chapter">
+  <h2 style="margin-top:0">Cuándo la app pide confirmación</h2>
+  <div class="row">
+    <div>
+      <p>Antes de guardar, la app vuelve a leer el stock actual. Pide confirmación en dos casos:</p>
+      <ul>
+        <li><b>El stock cambió</b> desde que abriste la ventana (por ejemplo, alguien cargó una venta desde otro dispositivo). Te muestra el valor nuevo para que decidas.</li>
+        <li><b>El egreso deja el stock en negativo.</b> Suele indicar un error de carga o un stock mal contado. Solo un <b>admin</b> puede confirmarlo; si sos operador, la app no lo permite y hay que revisar el stock con un admin.</li>
+      </ul>
+      <p>Si tocás <b>Guardar</b> dos veces por error (o la conexión del celular reintenta), el movimiento se registra <b>una sola vez</b>.</p>
+    </div>
+    <figure style="flex:.9"><img src="img/dialog-confirmar.png" alt=""><figcaption>Un egreso mayor al stock pide confirmación.</figcaption></figure>
+  </div>
+  <div class="row">
+    <figure class="phone" style="flex:.8"><img src="img/dialog-cel.png" alt=""><figcaption>La misma ventana en el celular.</figcaption></figure>
+    <div>
+      <h3>Ejemplos</h3>
+      <ul>
+        <li><b>Se vendió una amoladora por Mercado Libre:</b> − Egreso → Venta → Mercado Libre → 1.</li>
+        <li><b>Llegó una caja de 24 discos del proveedor:</b> + Ingreso → Compra → 24.</li>
+        <li><b>Un cliente de la web devolvió una pinza:</b> + Ingreso → Devolución → Web → 1.</li>
+        <li><b>Se rompió una llave al acomodar:</b> − Egreso → Rotura → 1, con una nota explicando qué pasó.</li>
+        <li><b>El recuento dio 2 mechas de más:</b> + Ingreso → Ajuste → 2.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 5 ================= -->
+<section class="chapter">
+  <h1><span class="num">5</span>Historial y anulaciones</h1>
+  <p>Tocando el SKU de un producto se abre su <b>detalle</b>: stock, mínimo, estado, datos del producto y el <b>historial completo</b> de movimientos, del más nuevo al más viejo.</p>
+  <figure><img src="img/detalle.png" alt=""><figcaption>Detalle de producto con su historial.</figcaption></figure>
+  <p>Cada línea del historial muestra la cantidad (en verde los ingresos), el motivo y el canal, la nota, la fecha y hora, quién lo cargó y cómo cambió el stock (por ejemplo, <i>stock 27 → 25</i>).</p>
+
+  <h2>Cómo corregir un error: Anular</h2>
+  <p>Los movimientos <b>nunca se borran</b>. Si cargaste algo mal (cantidad, producto o canal equivocado):</p>
+  <ol class="steps">
+    <li>Abrí el detalle del producto y buscá el movimiento en el historial.</li>
+    <li>Tocá <b>Anular</b> y confirmá.</li>
+    <li>La app registra el <b>movimiento inverso</b> (motivo "Anulación") y el stock vuelve al valor anterior. El original queda tachado y marcado como anulado.</li>
+    <li>Si corresponde, cargá el movimiento correcto.</li>
+  </ol>
+  <div class="tip"><b>Qué no se anula</b>El stock inicial de la importación y las propias anulaciones. Para corregir el stock inicial, usá un <b>Ajuste</b>.</div>
+</section>
+
+<!-- ================= 6 ================= -->
+<section class="chapter">
+  <h1><span class="num">6</span>Productos <span class="muted" style="font-family:Montserrat;font-size:11pt;letter-spacing:0">(admin)</span></h1>
+  <h2 style="margin-top:0">Dar de alta un producto</h2>
+  <p>En <b>Stock → Nuevo producto</b>. Campos:</p>
+  <table>
+    <tr><th style="width:28%">Campo</th><th>Detalle</th></tr>
+    <tr><td>SKU</td><td>Obligatorio y único. Se guarda en mayúsculas y sin espacios de más, así "bel-mec-06" y "BEL-MEC-06" son el mismo SKU (la app avisa si ya existe). No se puede cambiar después.</td></tr>
+    <tr><td>Descripción</td><td>Obligatoria. Es el nombre que se ve en toda la app.</td></tr>
+    <tr><td>Marca</td><td>Sugiere las marcas ya cargadas.</td></tr>
+    <tr><td>Producto base y variante</td><td>Para agrupar variantes. Ejemplo: producto base "Mecha acero rápido", variante "8 mm". Cada variante tiene su propio SKU y su propio stock.</td></tr>
+    <tr><td>Stock mínimo</td><td>Desde cuándo el producto se marca como "Bajo".</td></tr>
+    <tr><td>Stock inicial</td><td>Unidades con las que arranca. Queda registrado como movimiento "Stock inicial".</td></tr>
+    <tr><td>Ubicaciones</td><td>Dónde está en el depósito, con el formato del relevamiento: Zona-Módulo-Nivel (ej.: A-A01-2).</td></tr>
+    <tr><td>ID Mercado Libre / ID web</td><td>Identificador de la publicación en cada canal. Hoy es informativo; va a ser la base para una futura integración automática.</td></tr>
+  </table>
+  <figure><img src="img/editar.png" alt=""><figcaption>Edición de un producto.</figcaption></figure>
+</section>
+
+<section>
+  <h2>Editar un producto</h2>
+  <p>Desde el detalle del producto, <b>Editar producto</b>. Se pueden cambiar todos los datos salvo el SKU y el <b>stock</b>: el stock solo cambia con movimientos, así siempre queda registrado por qué cambió.</p>
+  <h2>Dar de baja</h2>
+  <p>En la edición, la opción <b>Dar de baja</b> oculta el producto de la tabla y bloquea nuevos movimientos, pero <b>conserva todo su historial</b>. Se puede ver con el filtro "Ver dados de baja" y reactivar desde la misma pantalla de edición.</p>
+</section>
+
+<!-- ================= 7 ================= -->
+<section class="chapter">
+  <h1><span class="num">7</span>Dashboard</h1>
+  <p>Es el resumen del negocio. <span class="muted">Las capturas de este capítulo usan datos de ejemplo para mostrar los gráficos completos.</span></p>
+  <figure><img src="img/dash-resumen.png" alt=""><figcaption>Stock de hoy, período, ventas e insights.</figcaption></figure>
+
+  <h2>Stock hoy</h2>
+  <p>Productos activos, unidades en stock, productos bajo el mínimo y sin stock. No depende del período. Tocando <b>Bajo el mínimo</b> o <b>Sin stock</b> se abre la tabla de stock ya filtrada.</p>
+
+  <h2>Período</h2>
+  <p>Elegí <b>7 días, 30 días, 90 días o 1 año</b>. Todo lo que está debajo del selector se calcula para ese período.</p>
+
+  <h2>Ventas</h2>
+  <p>Unidades vendidas en el período, con la comparación contra el período anterior de la misma duración (▲ subió, ▼ bajó), y cuánto se vendió por Mercado Libre <span class="sw" style="background:#2a78d6"></span> y por la web <span class="sw" style="background:#eb6834"></span>, con su porcentaje.</p>
+
+  <div class="keep"><h2>Insights</h2>
+  <p>Frases automáticas que resumen lo importante. Solo aparecen cuando los datos las respaldan. Pueden ser:</p>
+  <ul>
+    <li>Cuánto subieron o bajaron las ventas respecto del período anterior.</li>
+    <li>Qué canal concentra la mayor parte de las ventas.</li>
+    <li>Qué productos se quedan sin stock en una semana o menos al ritmo actual.</li>
+    <li>Cuántos de los más vendidos están bajo el mínimo o sin stock.</li>
+    <li>Qué porcentaje de las ventas explican los 5 productos más vendidos.</li>
+    <li>Qué día de la semana se vende más (si se destaca claramente).</li>
+    <li>Cuántos productos llevan más de 90 días sin movimiento.</li>
+    <li>Cuántos productos no tienen stock mínimo cargado.</li>
+  </ul></div>
+</section>
+
+<section>
+  <h2>Gráficos</h2>
+  <figure><img src="img/dash-graficos.png" alt=""><figcaption>Ventas por canal, ingresos y egresos, más vendidos y stock por marca.</figcaption></figure>
+  <table>
+    <tr><th style="width:28%">Gráfico</th><th>Qué muestra</th></tr>
+    <tr><td>Ventas por canal</td><td>Unidades vendidas en el tiempo, apiladas por canal. Se agrupa por día (7 y 30 días), por semana (90 días) o por mes (1 año).</td></tr>
+    <tr><td>Ingresos y egresos</td><td>Todo lo que entró <span class="sw" style="background:#4a3aa7"></span> y salió <span class="sw" style="background:#1baf7a"></span> del depósito en el tiempo (sin contar el stock inicial).</td></tr>
+    <tr><td>Más vendidos</td><td>Los 10 productos más vendidos del período, divididos por canal, con el total al final de cada barra.</td></tr>
+    <tr><td>Stock por marca</td><td>Unidades en stock hoy de cada marca.</td></tr>
+  </table>
+  <p>Pasando el mouse (o tocando en el celular) sobre una barra o una línea se ven los valores exactos. Debajo de cada gráfico, <b>Ver tabla</b> muestra los mismos números en una tabla.</p>
+</section>
+
+<section>
+  <h2>Se agotan pronto y stock inmovilizado</h2>
+  <figure><img src="img/dash-cobertura.png" alt=""></figure>
+  <h3>Se agotan pronto (días de cobertura)</h3>
+  <p>Cuántos días dura el stock de cada producto al ritmo de venta de los <b>últimos 30 días</b>:</p>
+  <p style="text-align:center"><b>días de cobertura = stock actual ÷ unidades vendidas por día</b></p>
+  <p>Ejemplo: 3 amoladoras en stock y 0,6 vendidas por día → alcanzan para 5 días. Se listan los productos que se agotan en 30 días o menos, del más urgente al menos urgente. Con pocos días de historial la app avisa que la estimación todavía no es confiable.</p>
+  <h3>Stock inmovilizado</h3>
+  <p>Productos con stock que <b>no tuvieron ningún egreso en los últimos 90 días</b>: mercadería parada que ocupa lugar y capital. Se calcula recién cuando hay 90 días de historial (antes, la app indica desde qué fecha va a estar disponible).</p>
+  <h3>Últimos movimientos</h3>
+  <p>Al final del dashboard, los 10 movimientos más recientes de todos los productos, con quién los cargó.</p>
+  <div class="tip"><b>Qué cuenta y qué no</b>Los movimientos anulados y sus anulaciones no cuentan en ninguna métrica. Las ventas se cuentan en unidades y no restan las devoluciones.</div>
+</section>
+
+<!-- ================= 8 ================= -->
+<section class="chapter">
+  <h1><span class="num">8</span>Exportar a Excel</h1>
+  <div class="row">
+    <div>
+      <p>En <b>Stock → Exportar</b> hay dos opciones:</p>
+      <h3>Stock actual</h3>
+      <p>Descarga <span class="mono">stock-AAAA-MM-DD.xlsx</span> con una fila por producto: SKU, producto base, variante, marca, descripción, stock, mínimo, estado, ubicaciones, IDs de Mercado Libre y web, si está activo y la fecha de la última actualización. Incluye una hoja <b>Info</b> con la fecha de exportación y los totales.</p>
+      <h3>Movimientos de un rango</h3>
+      <p>Elegí las fechas <b>Desde</b> y <b>Hasta</b> (por defecto, los últimos 30 días) y descargá los movimientos de ese período: fecha y hora, usuario, SKU, producto, tipo, motivo, canal, cantidad (negativa en los egresos), stock anterior y resultante, nota y si fue anulado.</p>
+      <p>Los archivos se abren en Excel o Google Sheets, con el encabezado fijo y filtros listos para usar.</p>
+    </div>
+    <figure style="flex:.8"><img src="img/exportar.png" alt=""><figcaption>Menú Exportar.</figcaption></figure>
+  </div>
+</section>
+
+<!-- ================= 9 ================= -->
+<section class="chapter">
+  <h1><span class="num">9</span>Importar el relevamiento <span class="muted" style="font-family:Montserrat;font-size:11pt;letter-spacing:0">(admin)</span></h1>
+  <p>Carga el stock inicial desde el Excel del relevamiento físico del depósito. <b>Se hace una sola vez</b>, con el sistema vacío; después, todo cambio se registra como movimiento.</p>
+  <h2>Paso a paso</h2>
+  <ol class="steps">
+    <li>En Google Sheets, abrí el relevamiento y descargalo: <b>Archivo → Descargar → Microsoft Excel (.xlsx)</b>.</li>
+    <li>En la app, entrá a <b>Importar</b>, elegí el archivo y tocá <b>Revisar archivo</b>. Todavía no se guarda nada.</li>
+    <li>Revisá el resumen: filas leídas, cantidad de SKUs, unidades totales, errores y advertencias, y la tabla con el stock consolidado de cada SKU.</li>
+    <li>Si hay <b>errores</b>, corregilos en el Excel y volvé a subirlo.</li>
+    <li>Si hay <b>advertencias</b>, revisalas y tildá "Revisé las advertencias".</li>
+    <li>Tocá <b>Confirmar importación</b>.</li>
+  </ol>
+  <h2>Cómo se lee el archivo</h2>
+  <ul>
+    <li>Se leen las pestañas cuyo nombre empieza con <b>Conteo</b> (Conteo_Topa, Conteo_Brofe, etc.).</li>
+    <li>Cada fila es un hallazgo físico; si un SKU aparece en varias filas o ubicaciones, <b>se suman</b>.</li>
+    <li>El total de cada fila se calcula como <b>cajas cerradas × unidades por caja + unidades sueltas</b>.</li>
+    <li>Las ubicaciones (Zona-Módulo-Nivel) se guardan en el producto.</li>
+    <li>La copia intacta de todas las filas queda en la pestaña <b>Stock_inicial</b>.</li>
+  </ul>
+</section>
+
+<section class="chapter">
+  <figure style="margin-top:0"><img src="img/importar.png" alt=""><figcaption>Vista previa de un archivo con errores y advertencias (archivo de prueba).</figcaption></figure>
+  <div class="row">
+    <div>
+      <h3>Errores (bloquean la importación)</h3>
+      <ul>
+        <li>Fila con datos pero sin SKU.</li>
+        <li>Cantidades con letras, decimales o negativas.</li>
+        <li>Cajas cerradas sin unidades por caja.</li>
+        <li>Un mismo SKU con marcas distintas.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Advertencias (hay que revisarlas)</h3>
+      <ul>
+        <li>El Total de la planilla no coincide con el calculado.</li>
+        <li>Filas con total 0.</li>
+        <li>Un SKU con descripciones distintas.</li>
+        <li>El mismo SKU cargado dos veces en la misma ubicación (posible doble conteo).</li>
+        <li>Recuentos con diferencia en la pestaña Recuentos: se importa el conteo original; si el recuento es el correcto, registrá un ajuste después.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 10 ================= -->
+<section class="chapter">
+  <h1><span class="num">10</span>Usuarios <span class="muted" style="font-family:Montserrat;font-size:11pt;letter-spacing:0">(admin)</span></h1>
+  <figure><img src="img/usuarios.png" alt=""><figcaption>Pantalla Usuarios.</figcaption></figure>
+  <ul>
+    <li><b>Crear un usuario:</b> usuario o email, nombre (es el que figura en los movimientos), rol y contraseña de al menos 8 caracteres.</li>
+    <li><b>Cambiar contraseña:</b> de cualquier usuario, incluida la propia. Úsalo también cuando alguien la olvida.</li>
+    <li><b>Desactivar:</b> el usuario ya no puede ingresar ni registrar movimientos; su historial se conserva. Se puede volver a activar.</li>
+  </ul>
+  <div class="tip"><b>Siempre queda un admin</b>La app no permite desactivarte a vos mismo ni dejar el sistema sin ningún admin activo.</div>
+</section>
+
+<!-- ================= 11 ================= -->
+<section class="chapter">
+  <h1><span class="num">11</span>Buenas prácticas y preguntas frecuentes</h1>
+  <h2 style="margin-top:0">Buenas prácticas</h2>
+  <ul>
+    <li><b>Registrá cada venta en el momento</b>, tanto de Mercado Libre como de la web. Así el stock publicado nunca queda por encima del real.</li>
+    <li><b>Usá la nota</b> para dejar contexto: número de venta, proveedor, motivo de una rotura.</li>
+    <li><b>Corregí con Anular</b>, nunca editando la planilla de Google Sheets.</li>
+    <li><b>Cargá el stock mínimo</b> de los productos que más rotan, para que el estado "Bajo" y los insights te avisen a tiempo.</li>
+    <li><b>Hacé recuentos periódicos</b> de los productos importantes y registrá las diferencias como <b>Ajuste</b>.</li>
+    <li><b>Mirá el Dashboard una vez por semana</b>: "Se agotan pronto" es la lista de reposición y "Stock inmovilizado" la de mercadería a promocionar.</li>
+  </ul>
+
+  <h2>Preguntas frecuentes</h2>
+  <div class="keep"><h3>¿Mercado Libre descuenta el stock solo?</h3><p>No, en esta versión cada venta se registra a mano. La conexión automática con Mercado Libre y con la web es una mejora a evaluar.</p></div>
+  <div class="keep"><h3>¿Qué pasa si dos personas cargan el mismo producto a la vez?</h3><p>Antes de guardar, la app relee el stock. Si cambió desde que abriste la ventana, te lo muestra y pide confirmación. La app está pensada para que la use una persona a la vez.</p></div>
+  <div class="keep"><h3>Cargué una venta en el producto equivocado.</h3><p>Anulá ese movimiento desde el historial del producto y cargá la venta en el producto correcto.</p></div>
+  <div class="keep"><h3>El stock de un producto no coincide con lo que hay en el depósito.</h3><p>Contá las unidades y registrá un <b>Ajuste</b> (ingreso si hay más, egreso si hay menos) con una nota. Revisá el historial: suele haber una venta sin registrar o un movimiento duplicado.</p></div>
+  <div class="keep"><h3>No veo "Nuevo producto", "Editar" ni "Importar".</h3><p>Son acciones de admin. Si las necesitás, pedile a un admin que las haga o que cambie tu rol.</p></div>
+  <div class="keep"><h3>¿Puedo usar la app sin conexión?</h3><p>No: necesita internet para leer y guardar en la planilla. Si la señal es mala y el guardado se reintenta, el movimiento igual se registra una sola vez.</p></div>
+  <div class="keep"><h3>¿Por qué el Dashboard dice que la cobertura "todavía no es confiable"?</h3><p>Porque hay pocos días de ventas registradas. Después de algunas semanas de uso la estimación se estabiliza.</p></div>
+</section>
+
+</body>
+</html>
