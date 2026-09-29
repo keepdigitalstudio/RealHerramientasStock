@@ -70,7 +70,7 @@ export async function commitImport(preview: ImportPreview, usuario: string) {
     p.stock,
     0,
     p.stock,
-    `Importación del relevamiento ${importacionId}`,
+    "Importación del relevamiento",
     false,
     "",
   ]);

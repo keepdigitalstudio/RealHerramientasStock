@@ -1,4 +1,5 @@
 import type { CellValue, Workbook, Worksheet } from "exceljs";
+import { normalizeSku } from "@/lib/stock/constants";
 
 // Lee el Excel del relevamiento (plantilla "RELEVAMIENTO DE STOCK – DEPÓSITO")
 // y consolida el stock por SKU. No escribe nada: solo arma la vista previa.
@@ -85,10 +86,6 @@ export function normalizeHeader(value: string): string {
     .replace(/[̀-ͯ]/g, "")
     .toLowerCase()
     .replace(/[^a-z0-9]/g, "");
-}
-
-export function normalizeSku(value: string): string {
-  return value.trim().replace(/\s+/g, " ").toUpperCase();
 }
 
 function cellValue(value: CellValue): string | number | Date | null {

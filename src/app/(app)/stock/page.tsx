@@ -1,10 +1,24 @@
-import { Placeholder } from "@/components/placeholder";
+import Link from "next/link";
+import { readProducts, withEstado } from "@/lib/stock/products";
+import { StockTable } from "./stock-table";
 
-export default function StockPage() {
+export const dynamic = "force-dynamic";
+
+export default async function StockPage() {
+  const products = (await readProducts()).map(withEstado);
+
   return (
-    <Placeholder
-      title="Stock"
-      description="Tabla de control de stock y registro de movimientos. Disponible en la etapa 3."
-    />
+    <section className="space-y-4">
+      <div className="flex items-center justify-between gap-3">
+        <h1 className="text-xl font-semibold">Stock</h1>
+        <Link
+          href="/stock/nuevo"
+          className="rounded-md bg-neutral-900 px-3 py-1.5 text-sm text-white"
+        >
+          Nuevo producto
+        </Link>
+      </div>
+      <StockTable products={products} />
+    </section>
   );
 }

@@ -11,7 +11,7 @@ Producción: https://real-herramientas-stock.vercel.app
 |---|---|---|
 | 1 | Proyecto base, repo y deploy en Vercel | Lista |
 | 2 | Conexión con el Sheet e importación del relevamiento | Lista |
-| 3 | Panel de stock y registro de movimientos | Pendiente |
+| 3 | Panel de stock y registro de movimientos | Lista |
 | 4 | Dashboard de métricas | Pendiente |
 | 5 | Exportación a Excel, login y ajustes finales | Pendiente |
 
@@ -39,11 +39,12 @@ Otros comandos:
 src/
   app/
     (app)/dashboard/   panel de métricas
-    (app)/stock/       tabla de control de stock
+    (app)/stock/       tabla de stock, detalle con historial, alta y edición
     (app)/importar/    carga inicial del relevamiento
   components/          componentes de UI
   lib/sheets/          cliente de Google Sheets y estructura de las pestañas
   lib/import/          lectura y validación del relevamiento, y carga inicial
+  lib/stock/           productos, movimientos, estados y anulaciones
   proxy.ts             protección temporal con usuario y contraseña
 scripts/               crear el Sheet, generar Excel de prueba, armar .env.local
 samples/               Excel de prueba con datos ficticios
@@ -97,6 +98,35 @@ sobreviven la descarga como .xlsx.
   misma ubicación, recuentos con diferencia en la pestaña `Recuentos`.
 - La importación inicial se hace una sola vez (con Productos vacío) y escribe las tres pestañas
   en una operación atómica. Cada SKU recibe un movimiento de ingreso con motivo `inicial`.
+
+## Stock y movimientos
+
+- **Estado:** *Sin stock* con 0 o menos; *Bajo* cuando hay un mínimo cargado y el stock llega a
+  ese mínimo o menos; *OK* en el resto.
+- **Movimientos:** ingreso (compra, reposición, devolución, ajuste) o egreso (venta, rotura,
+  pérdida, ajuste). Las ventas piden canal (Mercado Libre o web); las devoluciones lo admiten
+  opcionalmente.
+- El stock solo cambia con movimientos. Cada movimiento y el nuevo stock del producto se guardan
+  en una sola operación atómica.
+- **Anular:** registra el movimiento inverso con motivo `anulacion`; el original queda en el
+  historial marcado como anulado. El stock inicial y las anulaciones no se anulan.
+- **Dar de baja** un producto lo oculta de la tabla y bloquea sus movimientos, pero conserva el
+  historial. El SKU no se puede cambiar.
+
+### Concurrencia
+
+La app está pensada para una persona a la vez, así que no usa un candado externo. Igual se
+cubren los casos que pasan con un solo usuario:
+
+- **Envíos duplicados** (doble toque, reintentos por mala conexión): cada formulario genera un
+  identificador al abrirse; si el mismo movimiento llega dos veces, se guarda una sola.
+- **Stock desactualizado en pantalla** (dos pestañas o dispositivos): antes de guardar se relee el
+  stock del Sheet y se calcula sobre ese valor; si cambió desde que se abrió el formulario, se pide
+  confirmación.
+- Un egreso que deja el stock negativo también pide confirmación y queda marcado en el historial.
+
+Si más adelante la usan varias personas al mismo tiempo, conviene sumar un candado por SKU
+(por ejemplo con Upstash Redis) en `registerMovement`.
 
 ## Deploy en Vercel
 

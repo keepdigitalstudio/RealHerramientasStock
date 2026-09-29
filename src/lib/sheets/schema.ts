@@ -67,10 +67,3 @@ export const TABS = {
 } as const;
 
 export type TabKey = keyof typeof TABS;
-
-export const MOTIVOS = {
-  ingreso: ["inicial", "compra", "reposicion", "devolucion", "ajuste"],
-  egreso: ["venta", "rotura", "perdida", "ajuste"],
-} as const;
-
-export const CANALES = ["mercadolibre", "web"] as const;

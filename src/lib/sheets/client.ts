@@ -29,6 +29,7 @@ export function getSheets(): sheets_v4.Sheets {
 
 export type Cell = string | number | boolean;
 
+// Filas de datos (sin encabezado). La fila i del array es la fila i + 2 de la hoja.
 export async function readRows(tab: string): Promise<string[][]> {
   const res = await getSheets().spreadsheets.values.get({
     spreadsheetId: getSheetId(),
@@ -44,8 +45,16 @@ function toCellData(value: Cell): sheets_v4.Schema$CellData {
   return { userEnteredValue: { stringValue: value } };
 }
 
-// Agrega filas en varias pestañas en una sola operación: Google aplica todo o nada.
-export async function appendRowsAtomic(rowsByTab: Record<string, Cell[][]>): Promise<void> {
+export type WriteOp =
+  | { type: "append"; tab: string; rows: Cell[][] }
+  // sheetRow: número de fila como se ve en la hoja (la 1 es el encabezado).
+  | { type: "update"; tab: string; sheetRow: number; values: Cell[] };
+
+// Aplica varias escrituras en una sola operación: Google aplica todo o nada.
+export async function writeAtomic(ops: WriteOp[]): Promise<void> {
+  const active = ops.filter((op) => op.type === "update" || op.rows.length > 0);
+  if (active.length === 0) return;
+
   const spreadsheetId = getSheetId();
   const meta = await getSheets().spreadsheets.get({
     spreadsheetId,
@@ -54,32 +63,35 @@ export async function appendRowsAtomic(rowsByTab: Record<string, Cell[][]>): Pro
   const ids = new Map(
     (meta.data.sheets ?? []).map((s) => [s.properties!.title!, s.properties!.sheetId!]),
   );
+  const sheetIdOf = (tab: string) => {
+    const id = ids.get(tab);
+    if (id === undefined) throw new Error(`No existe la pestaña ${tab} en el Sheet`);
+    return id;
+  };
 
-  const requests = Object.entries(rowsByTab)
-    .filter(([, rows]) => rows.length > 0)
-    .map(([tab, rows]) => {
-      const sheetId = ids.get(tab);
-      if (sheetId === undefined) throw new Error(`No existe la pestaña ${tab} en el Sheet`);
-      return {
-        appendCells: {
-          sheetId,
-          rows: rows.map((row) => ({ values: row.map(toCellData) })),
-          fields: "userEnteredValue",
+  const requests: sheets_v4.Schema$Request[] = active.map((op) =>
+    op.type === "append"
+      ? {
+          appendCells: {
+            sheetId: sheetIdOf(op.tab),
+            rows: op.rows.map((row) => ({ values: row.map(toCellData) })),
+            fields: "userEnteredValue",
+          },
+        }
+      : {
+          updateCells: {
+            start: { sheetId: sheetIdOf(op.tab), rowIndex: op.sheetRow - 1, columnIndex: 0 },
+            rows: [{ values: op.values.map(toCellData) }],
+            fields: "userEnteredValue",
+          },
         },
-      };
-    });
+  );
 
-  if (requests.length === 0) return;
   await getSheets().spreadsheets.batchUpdate({ spreadsheetId, requestBody: { requests } });
 }
 
-export async function appendRows(tab: string, rows: Cell[][]): Promise<void> {
-  if (rows.length === 0) return;
-  await getSheets().spreadsheets.values.append({
-    spreadsheetId: getSheetId(),
-    range: `${tab}!A1`,
-    valueInputOption: "RAW",
-    insertDataOption: "INSERT_ROWS",
-    requestBody: { values: rows },
-  });
+export async function appendRowsAtomic(rowsByTab: Record<string, Cell[][]>): Promise<void> {
+  await writeAtomic(
+    Object.entries(rowsByTab).map(([tab, rows]) => ({ type: "append", tab, rows })),
+  );
 }
