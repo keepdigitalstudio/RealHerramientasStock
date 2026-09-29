@@ -1,3 +1,4 @@
+import { requirePageAdmin } from "@/lib/auth/session";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { readProducts } from "@/lib/stock/products";
@@ -6,6 +7,7 @@ import { ProductForm } from "../../product-form";
 export const dynamic = "force-dynamic";
 
 export default async function EditarProductoPage({ params }: PageProps<"/stock/[sku]/editar">) {
+  await requirePageAdmin();
   const sku = decodeURIComponent((await params).sku);
   const products = await readProducts();
   const p = products.find((x) => x.sku === sku);

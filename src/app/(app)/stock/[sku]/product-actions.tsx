@@ -8,9 +8,11 @@ import type { Tipo } from "@/lib/stock/constants";
 export function ProductActions({
   target,
   activo,
+  isAdmin,
 }: {
   target: Omit<MovementTarget, "tipo">;
   activo: boolean;
+  isAdmin: boolean;
 }) {
   const [tipo, setTipo] = useState<Tipo | null>(null);
   const btn = "rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm hover:bg-neutral-100";
@@ -27,9 +29,11 @@ export function ProductActions({
           </button>
         </>
       )}
-      <Link href={`/stock/${encodeURIComponent(target.sku)}/editar`} className={btn}>
-        Editar producto
-      </Link>
+      {isAdmin && (
+        <Link href={`/stock/${encodeURIComponent(target.sku)}/editar`} className={btn}>
+          Editar producto
+        </Link>
+      )}
       <MovementDialog target={tipo ? { ...target, tipo } : null} onClose={() => setTipo(null)} />
     </div>
   );

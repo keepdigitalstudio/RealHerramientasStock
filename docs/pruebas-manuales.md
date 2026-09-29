@@ -80,3 +80,31 @@ Productos
 - [ ] Con pocos días de historial: "Se agotan pronto" avisa que la estimación todavía no es
       confiable y "Stock inmovilizado" indica desde qué fecha se calcula.
 - [ ] En el celular todo se lee en una columna y no hay desplazamiento lateral.
+
+## Etapa 5 — Login, permisos y exportación
+
+Login
+- [ ] Sin sesión, cualquier pantalla lleva al login; después de ingresar vuelve a la pantalla pedida.
+- [ ] Usuario o contraseña incorrectos muestran "Usuario o contraseña incorrectos".
+- [ ] El usuario se acepta con mayúsculas o espacios de más.
+- [ ] "Salir" cierra la sesión y vuelve al login.
+
+Operador (`real`)
+- [ ] El menú muestra solo Dashboard y Stock; no aparecen "Nuevo producto" ni "Editar producto".
+- [ ] Entrar a mano a `/importar`, `/usuarios` o `/stock/nuevo` lleva al Dashboard.
+- [ ] Un egreso que deja el stock negativo se rechaza con un mensaje claro.
+- [ ] Los movimientos registrados figuran con el nombre del operador en el historial.
+
+Admin
+- [ ] Ve Importar y Usuarios.
+- [ ] Usuarios: cambiar la contraseña de `real` y entrar con la nueva.
+- [ ] Crear un usuario de prueba, ingresar con él, desactivarlo y comprobar que ya no puede
+      registrar movimientos (ni volver a ingresar).
+- [ ] No se puede desactivar a sí mismo.
+
+Exportación
+- [ ] Stock → Exportar → Stock actual: baja `stock-AAAA-MM-DD.xlsx` con una fila por producto y
+      los mismos números que la tabla.
+- [ ] Movimientos de un rango: baja un Excel solo con los movimientos de esas fechas; los egresos
+      tienen cantidad negativa y los anulados figuran como tales.
+- [ ] Abrir los archivos en Excel y en Google Sheets: encabezado verde fijo y filtros.

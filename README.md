@@ -13,7 +13,7 @@ Producción: https://real-herramientas-stock.vercel.app
 | 2 | Conexión con el Sheet e importación del relevamiento | Lista |
 | 3 | Panel de stock y registro de movimientos | Lista |
 | 4 | Dashboard de métricas | Lista |
-| 5 | Exportación a Excel, login y ajustes finales | Pendiente |
+| 5 | Exportación a Excel, login y ajustes finales | Lista |
 
 ## Instalación local
 
@@ -32,6 +32,7 @@ Otros comandos:
 | `npm run setup-sheet` | Crea las pestañas y encabezados del Sheet de datos (no borra nada) |
 | `npm run sample-relevamiento` | Genera en `samples/` dos Excel de prueba: uno válido y uno con errores |
 | `node scripts/env-from-key.mjs` | Arma `.env.local` desde `secrets/service-account.json` |
+| `NEW_USER_PASSWORD='…' npm run create-user -- --login x --nombre X --rol admin` | Crea un usuario (sirve para el primer admin) |
 
 ## Estructura
 
@@ -40,12 +41,17 @@ src/
   app/
     (app)/dashboard/   panel de métricas y gráficos
     (app)/stock/       tabla de stock, detalle con historial, alta y edición
-    (app)/importar/    carga inicial del relevamiento
+    (app)/importar/    carga inicial del relevamiento (admin)
+    (app)/usuarios/    alta de usuarios y cambio de contraseñas (admin)
+    login/             pantalla de ingreso
+    api/export/        descargas .xlsx de stock y movimientos
   components/          componentes de UI
   lib/sheets/          cliente de Google Sheets y estructura de las pestañas
   lib/import/          lectura y validación del relevamiento, y carga inicial
   lib/stock/           productos, movimientos, estados, anulaciones y métricas
-  proxy.ts             protección temporal con usuario y contraseña
+  lib/auth/            sesión (cookie firmada), usuarios y permisos
+  lib/export/          armado de los Excel
+  proxy.ts             redirige al login sin sesión y saca a los operadores de pantallas de admin
 scripts/               crear el Sheet, generar Excel de prueba, armar .env.local
 samples/               Excel de prueba con datos ficticios
 docs/                  pruebas manuales
@@ -61,7 +67,7 @@ cuatro pestañas:
 | Productos | Una fila por SKU: stock actual, mínimo, ubicaciones, IDs de Mercado Libre y web |
 | Movimientos | Log de todos los ingresos y egresos. Nunca se borra; el stock se puede recalcular desde acá |
 | Stock_inicial | Copia intacta de las filas del relevamiento importado |
-| Usuarios | Usuarios de la app (etapa 5) |
+| Usuarios | Usuarios de la app: usuario o email, nombre, rol, contraseña cifrada (bcrypt), activo |
 
 No editar estas pestañas a mano: todo cambio de stock tiene que pasar por la app.
 
@@ -155,6 +161,44 @@ Colores: Mercado Libre azul y web naranja en todo el dashboard; ingresos violeta
 estados con la paleta de estado y siempre con texto. La paleta se validó para daltonismo y
 contraste.
 
+## Login y permisos
+
+Se ingresa con usuario (o email) y contraseña. La sesión dura 30 días y se guarda en una cookie
+firmada (`AUTH_SECRET`). Cada acción que modifica datos vuelve a verificar contra la pestaña
+Usuarios que la persona siga activa y con el mismo rol, así una baja o un cambio de rol se
+aplican enseguida.
+
+| | Admin | Operador |
+|---|---|---|
+| Ver stock, historial y dashboard | ✔ | ✔ |
+| Registrar y anular movimientos | ✔ | ✔ |
+| Exportar a Excel | ✔ | ✔ |
+| Dejar el stock en negativo | ✔ | – |
+| Alta y edición de productos | ✔ | – |
+| Importar el relevamiento | ✔ | – |
+| Usuarios y contraseñas | ✔ | – |
+
+En **Usuarios** el admin crea usuarios, cambia contraseñas (mínimo 8 caracteres) y activa o
+desactiva operadores. No se puede dejar el sistema sin un admin activo. El nombre de cada
+usuario es el que figura en los movimientos.
+
+**Primer admin:** con el Sheet configurado, correr
+`NEW_USER_PASSWORD='…' npm run create-user -- --login email@ejemplo.com --nombre Nombre --rol admin`.
+
+## Exportación a Excel
+
+En **Stock → Exportar**:
+
+- **Stock actual:** una fila por producto (SKU, producto base, variante, marca, descripción,
+  stock, mínimo, estado, ubicaciones, IDs de ML y web, activo, última actualización) y una hoja
+  Info con la fecha y los totales.
+- **Movimientos de un rango de fechas** (por defecto, los últimos 30 días): fecha y hora,
+  usuario, SKU, producto, tipo, motivo, canal, cantidad (negativa en egresos), stock anterior y
+  resultante, nota y si fue anulado.
+
+Los archivos tienen encabezado fijo y filtros. También se pueden bajar directo desde
+`/api/export/stock` y `/api/export/movimientos?desde=AAAA-MM-DD&hasta=AAAA-MM-DD` (con sesión).
+
 ## Marca
 
 Verde Real `#0D5B3A` y blanco (tokens `brand`, `brand-dark` y `brand-50` en `src/app/globals.css`).
@@ -173,6 +217,4 @@ a propósito: están validados para distinguir canales.
 4. Cada push a `main` se publica automáticamente. Después de cambiar variables hay que
    volver a desplegar (*Deployments → ⋯ → Redeploy*).
 
-Hasta que exista el login (etapa 5), el sitio está protegido con usuario y contraseña del
-navegador (`BASIC_AUTH_USER` / `BASIC_AUTH_PASSWORD`). Si faltan en Vercel, el sitio responde
-503 en vez de quedar abierto.
+`AUTH_SECRET` es obligatoria: sin ella no se puede ingresar.

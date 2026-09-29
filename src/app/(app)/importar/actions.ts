@@ -1,6 +1,7 @@
 "use server";
 
 import ExcelJS from "exceljs";
+import { requireUser } from "@/lib/auth/session";
 import { commitImport, productosCargados } from "@/lib/import/commit";
 import { parseRelevamiento, type ImportIssue, type ImportedProduct } from "@/lib/import/parse";
 
@@ -48,6 +49,7 @@ function message(e: unknown) {
 
 export async function previewImport(formData: FormData): Promise<PreviewResult> {
   try {
+    await requireUser({ admin: true });
     const { fileName, preview } = await readUpload(formData);
     return {
       ok: true,
@@ -67,8 +69,9 @@ export async function previewImport(formData: FormData): Promise<PreviewResult> 
 // Vuelve a leer el archivo en vez de confiar en la vista previa que tiene el navegador.
 export async function confirmImport(formData: FormData): Promise<ConfirmResult> {
   try {
+    const user = await requireUser({ admin: true });
     const { preview } = await readUpload(formData);
-    const res = await commitImport(preview, "sistema"); // TODO etapa 5: usuario logueado
+    const res = await commitImport(preview, user.nombre);
     return { ok: true, productos: res.productos, unidades: res.unidades };
   } catch (e) {
     return { ok: false, error: message(e) };

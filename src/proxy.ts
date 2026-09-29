@@ -1,34 +1,36 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { SESSION_COOKIE, verifySessionToken } from "@/lib/auth/token";
 
-// Protección TEMPORAL con usuario y contraseña (Basic Auth) hasta que exista el login
-// propio (etapa 5). En Vercel, si faltan las variables, el sitio queda bloqueado en vez
-// de abierto. En local, sin variables, no pide nada.
-export function proxy(request: NextRequest) {
-  const user = process.env.BASIC_AUTH_USER;
-  const password = process.env.BASIC_AUTH_PASSWORD;
+// Control rápido en cada pedido (solo lee la cookie firmada). La verificación real de
+// permisos se repite en cada página y acción que toca datos.
 
-  if (!user || !password) {
-    if (process.env.VERCEL) {
-      return new NextResponse("Falta configurar BASIC_AUTH_USER y BASIC_AUTH_PASSWORD.", {
-        status: 503,
-      });
+const PUBLIC = ["/login"];
+const ADMIN_ONLY = [/^\/importar/, /^\/usuarios/, /^\/stock\/nuevo$/, /^\/stock\/[^/]+\/editar$/];
+
+export async function proxy(request: NextRequest) {
+  const { pathname, search } = request.nextUrl;
+  const session = await verifySessionToken(request.cookies.get(SESSION_COOKIE)?.value);
+
+  if (PUBLIC.includes(pathname)) {
+    return session ? NextResponse.redirect(new URL("/dashboard", request.url)) : NextResponse.next();
+  }
+
+  if (!session) {
+    if (pathname.startsWith("/api/")) {
+      return NextResponse.json({ error: "Sesión vencida" }, { status: 401 });
     }
-    return NextResponse.next();
+    const login = new URL("/login", request.url);
+    if (pathname !== "/" && pathname !== "/dashboard") login.searchParams.set("next", pathname + search);
+    return NextResponse.redirect(login);
   }
 
-  const header = request.headers.get("authorization") ?? "";
-  const [scheme, encoded] = header.split(" ");
-  if (scheme === "Basic" && encoded) {
-    const [u, ...rest] = atob(encoded).split(":");
-    if (u === user && rest.join(":") === password) return NextResponse.next();
+  if (session.rol !== "admin" && ADMIN_ONLY.some((r) => r.test(pathname))) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
-  return new NextResponse("Acceso restringido", {
-    status: 401,
-    headers: { "WWW-Authenticate": 'Basic realm="Real Herramientas Stock", charset="UTF-8"' },
-  });
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/((?!_next/static|_next/image|icon.png|apple-icon.png|brand/).*)"],
 };

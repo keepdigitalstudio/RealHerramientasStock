@@ -8,15 +8,19 @@
     "start": "next start",
     "lint": "eslint",
     "setup-sheet": "tsx --env-file=.env.local scripts/setup-sheet.mts",
-    "sample-relevamiento": "tsx scripts/make-sample-relevamiento.mts"
+    "sample-relevamiento": "tsx scripts/make-sample-relevamiento.mts",
+    "create-user": "tsx --env-file=.env.local scripts/create-user.mts"
   },
   "dependencies": {
     "@googleapis/sheets": "^18.0.1",
+    "bcryptjs": "^3.0.3",
     "exceljs": "^4.4.0",
+    "jose": "^6.2.12",
     "next": "16.3.6",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "recharts": "^3.10.1",
+    "server-only": "^0.0.1",
     "zod": "^4.6.5"
   },
   "devDependencies": {

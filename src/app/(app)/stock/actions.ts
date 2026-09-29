@@ -9,14 +9,13 @@ import {
   StockError,
   type MovementResult,
 } from "@/lib/stock/movements";
+import { AuthError, requireUser } from "@/lib/auth/session";
 import { createProduct, updateProduct, type ProductFields } from "@/lib/stock/product-mutations";
-
-const USUARIO = "sistema"; // TODO etapa 5: usuario logueado
 
 export type ActionResult<T> = { ok: true; data: T } | { ok: false; error: string };
 
 function fail(e: unknown): { ok: false; error: string } {
-  if (e instanceof StockError) return { ok: false, error: e.message };
+  if (e instanceof StockError || e instanceof AuthError) return { ok: false, error: e.message };
   if (e instanceof z.ZodError) return { ok: false, error: e.issues[0]?.message ?? "Datos inválidos." };
   console.error(e);
   return { ok: false, error: "No se pudo guardar. Probá de nuevo en unos segundos." };
@@ -61,9 +60,10 @@ export async function registerMovementAction(
 ): Promise<ActionResult<MovementResult>> {
   try {
     const { stockVisto, confirmado, ...m } = movementSchema.parse(raw);
+    const user = await requireUser();
     const result = await registerMovement(
       { ...m, motivo: m.motivo as Motivo }, // validado arriba contra MOTIVOS_MANUALES
-      { usuario: USUARIO, stockVisto, confirmado },
+      { usuario: user.nombre, stockVisto, confirmado, permitirNegativo: user.rol === "admin" },
     );
     if (result.status !== "confirmar") refresh(m.sku);
     return { ok: true, data: result };
@@ -84,7 +84,13 @@ export async function cancelMovementAction(
 ): Promise<ActionResult<MovementResult>> {
   try {
     const { movementId, sku, stockVisto, confirmado } = cancelSchema.parse(raw);
-    const result = await cancelMovement(movementId, { usuario: USUARIO, stockVisto, confirmado });
+    const user = await requireUser();
+    const result = await cancelMovement(movementId, {
+      usuario: user.nombre,
+      stockVisto,
+      confirmado,
+      permitirNegativo: user.rol === "admin",
+    });
     if (result.status !== "confirmar") refresh(sku);
     return { ok: true, data: result };
   } catch (e) {
@@ -123,7 +129,8 @@ export async function createProductAction(
 ): Promise<ActionResult<{ sku: string }>> {
   try {
     const { sku, fields, stockInicial } = createSchema.parse(raw);
-    const created = await createProduct(sku, fields, stockInicial, USUARIO);
+    const user = await requireUser({ admin: true });
+    const created = await createProduct(sku, fields, stockInicial, user.nombre);
     refresh(created);
     return { ok: true, data: { sku: created } };
   } catch (e) {
@@ -138,6 +145,7 @@ export async function updateProductAction(
 ): Promise<ActionResult<{ sku: string }>> {
   try {
     const { sku, fields } = updateSchema.parse(raw);
+    await requireUser({ admin: true });
     await updateProduct(sku, fields);
     refresh(sku);
     return { ok: true, data: { sku } };

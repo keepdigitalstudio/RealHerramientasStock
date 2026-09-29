@@ -88,12 +88,19 @@ export type MovementResult =
 
 export class StockError extends Error {}
 
+export type MovementOpts = {
+  usuario: string;
+  stockVisto: number;
+  confirmado: boolean;
+  permitirNegativo: boolean; // solo admin
+};
+
 // Relee el stock del Sheet justo antes de guardar y calcula sobre ese valor. Si cambió
 // desde que se abrió el formulario, o si el resultado queda negativo, pide confirmación.
 // El movimiento y el nuevo stock del producto se escriben en una sola operación atómica.
 export async function registerMovement(
   input: MovementInput,
-  opts: { usuario: string; stockVisto: number; confirmado: boolean },
+  opts: MovementOpts,
 ): Promise<MovementResult> {
   const [products, movements] = await Promise.all([
     readProducts(),
@@ -110,6 +117,12 @@ export async function registerMovement(
 
   const anterior = product.stockActual;
   const resultante = input.tipo === "ingreso" ? anterior + input.cantidad : anterior - input.cantidad;
+
+  if (resultante < 0 && !opts.permitirNegativo) {
+    throw new StockError(
+      `Este movimiento deja el stock en ${resultante}. Solo un admin puede dejar el stock en negativo.`,
+    );
+  }
 
   const check: MovementCheck = {};
   if (opts.stockVisto !== anterior) check.stockCambio = { visto: opts.stockVisto, actual: anterior };
@@ -141,7 +154,7 @@ export async function registerMovement(
 // Anular = registrar el movimiento inverso. El original queda en el log.
 export async function cancelMovement(
   movementId: string,
-  opts: { usuario: string; confirmado: boolean; stockVisto: number },
+  opts: MovementOpts,
 ): Promise<MovementResult> {
   const all = await readMovements();
   const original = all.find((m) => m.id === movementId);

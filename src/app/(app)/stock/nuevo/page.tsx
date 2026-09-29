@@ -1,3 +1,4 @@
+import { requirePageAdmin } from "@/lib/auth/session";
 import Link from "next/link";
 import { readProducts } from "@/lib/stock/products";
 import { ProductForm } from "../product-form";
@@ -5,6 +6,7 @@ import { ProductForm } from "../product-form";
 export const dynamic = "force-dynamic";
 
 export default async function NuevoProductoPage() {
+  await requirePageAdmin();
   const marcas = [...new Set((await readProducts()).map((p) => p.marca).filter(Boolean))].sort();
   return (
     <section className="space-y-4">

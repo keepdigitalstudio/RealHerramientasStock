@@ -1,6 +1,8 @@
+import { requirePageAdmin } from "@/lib/auth/session";
 import { ImportForm } from "./import-form";
 
-export default function ImportarPage() {
+export default async function ImportarPage() {
+  await requirePageAdmin();
   return (
     <section className="space-y-4">
       <div>

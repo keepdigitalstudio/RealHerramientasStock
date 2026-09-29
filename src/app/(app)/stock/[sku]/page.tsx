@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { EstadoBadge } from "@/components/estado-badge";
+import { requirePageSession } from "@/lib/auth/session";
 import { readMovements } from "@/lib/stock/movements";
 import { findProduct, withEstado } from "@/lib/stock/products";
 import { History } from "./history";
@@ -10,7 +11,11 @@ export const dynamic = "force-dynamic";
 
 export default async function ProductPage({ params }: PageProps<"/stock/[sku]">) {
   const sku = decodeURIComponent((await params).sku);
-  const [found, movements] = await Promise.all([findProduct(sku), readMovements(sku)]);
+  const [session, found, movements] = await Promise.all([
+    requirePageSession(),
+    findProduct(sku),
+    readMovements(sku),
+  ]);
   if (!found) notFound();
   const p = withEstado(found);
 
@@ -51,6 +56,7 @@ export default async function ProductPage({ params }: PageProps<"/stock/[sku]">)
       <ProductActions
         target={{ sku: p.sku, descripcion: p.descripcion, stockActual: p.stockActual }}
         activo={p.activo}
+        isAdmin={session.rol === "admin"}
       />
 
       <dl className="grid grid-cols-2 gap-x-6 gap-y-3 rounded-lg border border-neutral-200 bg-white p-4 text-sm sm:grid-cols-3">
