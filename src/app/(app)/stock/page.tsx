@@ -15,10 +15,10 @@ export default async function StockPage({ searchParams }: PageProps<"/stock">) {
   return (
     <section className="space-y-4">
       <div className="flex items-center justify-between gap-3">
-        <h1 className="text-xl font-semibold">Stock</h1>
+        <h1 className="page-title">Stock</h1>
         <Link
           href="/stock/nuevo"
-          className="rounded-md bg-neutral-900 px-3 py-1.5 text-sm text-white"
+          className="rounded-md bg-brand hover:bg-brand-dark px-3 py-1.5 text-sm text-white"
         >
           Nuevo producto
         </Link>

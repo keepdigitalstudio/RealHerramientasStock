@@ -129,7 +129,7 @@ export function ProductForm(props: Props) {
         <button type="button" onClick={() => router.back()} className="rounded-md px-4 py-2 text-sm text-neutral-600 hover:bg-neutral-100">
           Cancelar
         </button>
-        <button type="submit" disabled={pending} className="rounded-md bg-neutral-900 px-4 py-2 text-sm text-white disabled:opacity-40">
+        <button type="submit" disabled={pending} className="rounded-md bg-brand hover:bg-brand-dark px-4 py-2 text-sm text-white disabled:opacity-40">
           {pending ? "Guardando…" : props.mode === "create" ? "Crear producto" : "Guardar cambios"}
         </button>
       </div>

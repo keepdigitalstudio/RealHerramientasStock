@@ -32,7 +32,7 @@ export default async function ProductPage({ params }: PageProps<"/stock/[sku]">)
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="font-mono text-xs text-neutral-500">{p.sku}</p>
-          <h1 className="text-xl font-semibold">{p.descripcion}</h1>
+          <h1 className="text-xl font-semibold text-neutral-900">{p.descripcion}</h1>
           {!p.activo && <p className="text-sm text-red-700">Dado de baja</p>}
         </div>
         <div className="flex items-end gap-6">

@@ -22,8 +22,8 @@ export function Nav() {
             href={link.href}
             className={`rounded-md px-3 py-1.5 text-sm whitespace-nowrap ${
               active
-                ? "bg-neutral-900 text-white"
-                : "text-neutral-600 hover:bg-neutral-200"
+                ? "bg-white font-medium text-brand"
+                : "text-white/85 hover:bg-white/10"
             }`}
           >
             {link.label}

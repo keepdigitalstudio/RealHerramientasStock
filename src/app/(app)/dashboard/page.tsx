@@ -37,7 +37,7 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
   if (products.length === 0) {
     return (
       <section className="space-y-4">
-        <h1 className="text-xl font-semibold">Dashboard</h1>
+        <h1 className="page-title">Dashboard</h1>
         <p className="rounded-lg border border-dashed border-neutral-300 bg-white p-6 text-center text-sm text-neutral-600">
           Todavía no hay datos. Empezá por <Link href="/importar" className="underline">importar el relevamiento</Link>.
         </p>
@@ -47,7 +47,7 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
 
   return (
     <section className="space-y-8">
-      <h1 className="text-xl font-semibold">Dashboard</h1>
+      <h1 className="page-title">Dashboard</h1>
 
       {/* Stock de hoy: no depende del período */}
       <div>
@@ -71,14 +71,14 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
       </div>
 
       {/* Filtro de período: aplica a todo lo que sigue */}
-      <div className="sticky top-[57px] z-[5] -mx-4 flex flex-wrap items-center gap-2 border-y border-neutral-200 bg-neutral-50/95 px-4 py-2 backdrop-blur sm:top-[61px]">
+      <div className="sticky top-[101px] z-[5] -mx-4 flex flex-wrap items-center gap-2 border-y border-neutral-200 bg-neutral-50/95 px-4 py-2 backdrop-blur sm:top-[61px]">
         <span className="text-sm text-neutral-600">Período</span>
         {PERIODOS.map((p) => (
           <Link
             key={p}
             href={`/dashboard?dias=${p}`}
             scroll={false}
-            className={`rounded-md px-3 py-1 text-sm ${p === dias ? "bg-neutral-900 text-white" : "text-neutral-700 hover:bg-neutral-200"}`}
+            className={`rounded-md px-3 py-1 text-sm ${p === dias ? "bg-brand text-white" : "text-neutral-700 hover:bg-neutral-200"}`}
           >
             {p === 365 ? "1 año" : `${p} días`}
           </Link>

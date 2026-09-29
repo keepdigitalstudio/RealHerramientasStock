@@ -17,7 +17,7 @@ export default async function EditarProductoPage({ params }: PageProps<"/stock/[
       <Link href={`/stock/${encodeURIComponent(sku)}`} className="text-sm text-neutral-600 hover:underline">
         ← {sku}
       </Link>
-      <h1 className="text-xl font-semibold">Editar producto</h1>
+      <h1 className="page-title">Editar producto</h1>
       <ProductForm
         mode="edit"
         marcas={marcas}

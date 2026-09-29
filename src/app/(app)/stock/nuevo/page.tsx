@@ -11,7 +11,7 @@ export default async function NuevoProductoPage() {
       <Link href="/stock" className="text-sm text-neutral-600 hover:underline">
         ← Stock
       </Link>
-      <h1 className="text-xl font-semibold">Nuevo producto</h1>
+      <h1 className="page-title">Nuevo producto</h1>
       <ProductForm mode="create" marcas={marcas} />
     </section>
   );

@@ -67,7 +67,7 @@ export function ImportForm() {
           type="button"
           onClick={onPreview}
           disabled={pending}
-          className="rounded-md bg-neutral-900 px-4 py-2 text-sm text-white disabled:opacity-50 sm:ml-auto"
+          className="rounded-md bg-brand hover:bg-brand-dark px-4 py-2 text-sm text-white disabled:opacity-50 sm:ml-auto"
         >
           {pending && !preview ? "Revisando…" : "Revisar archivo"}
         </button>
@@ -128,7 +128,7 @@ export function ImportForm() {
                 type="button"
                 onClick={onConfirm}
                 disabled={!canConfirm || pending}
-                className="rounded-md bg-neutral-900 px-4 py-2 text-sm text-white disabled:opacity-40 sm:ml-auto"
+                className="rounded-md bg-brand hover:bg-brand-dark px-4 py-2 text-sm text-white disabled:opacity-40 sm:ml-auto"
               >
                 {pending ? "Importando…" : `Confirmar importación de ${preview.productos.length} productos`}
               </button>

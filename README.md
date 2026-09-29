@@ -155,6 +155,15 @@ Colores: Mercado Libre azul y web naranja en todo el dashboard; ingresos violeta
 estados con la paleta de estado y siempre con texto. La paleta se validó para daltonismo y
 contraste.
 
+## Marca
+
+Verde Real `#0D5B3A` y blanco (tokens `brand`, `brand-dark` y `brand-50` en `src/app/globals.css`).
+Titulares en Bebas Neue (clase `page-title`) y textos en Montserrat, cargadas con `next/font`.
+El isotipo está en `public/brand/` (verde y blanco, PNG transparente) y el ícono de la app en
+`src/app/icon.png` y `apple-icon.png`. Se extrajeron del brand board: si se consigue el logo
+original en SVG, conviene reemplazarlos. Los colores de los gráficos no usan el verde de la marca
+a propósito: están validados para distinguir canales.
+
 ## Deploy en Vercel
 
 1. En Vercel, **Add New → Project** e importar este repo de GitHub.

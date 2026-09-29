@@ -209,7 +209,7 @@ function MovementForm({ target, onDone }: { target: MovementTarget; onDone: () =
         <button
           type="submit"
           disabled={!valido || pending}
-          className="rounded-md bg-neutral-900 px-4 py-2 text-sm text-white disabled:opacity-40"
+          className="rounded-md bg-brand hover:bg-brand-dark px-4 py-2 text-sm text-white disabled:opacity-40"
         >
           {pending ? "Guardando…" : check ? "Confirmar" : "Guardar"}
         </button>

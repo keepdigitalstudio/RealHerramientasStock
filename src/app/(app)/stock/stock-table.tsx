@@ -104,7 +104,7 @@ export function StockTable({
         <select
           value={estado}
           onChange={(e) => setEstado(e.target.value as Estado | "")}
-          className={`${input} sm:w-40`}
+          className={`${input} sm:w-48`}
         >
           <option value="">Todos los estados</option>
           {(Object.keys(ESTADO_LABEL) as Estado[]).map((e) => (
@@ -116,7 +116,7 @@ export function StockTable({
         <select
           value={marca}
           onChange={(e) => setMarca(e.target.value)}
-          className={`${input} sm:w-40`}
+          className={`${input} sm:w-48`}
         >
           <option value="">Todas las marcas</option>
           {marcas.map((m) => (

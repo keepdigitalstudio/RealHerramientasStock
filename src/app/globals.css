@@ -1,11 +1,32 @@
 @import "tailwindcss";
 
+/* Marca Real Herramientas: Verde Real #0D5B3A y blanco.
+   Titulares en Bebas Neue, textos en Montserrat. */
 @theme {
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-montserrat);
+  --font-display: var(--font-bebas);
   --font-mono: var(--font-geist-mono);
+
+  --color-brand: #0d5b3a;
+  --color-brand-dark: #094429;
+  --color-brand-50: #eaf3ee;
 }
 
 body {
   background: var(--color-neutral-50);
   color: var(--color-neutral-900);
+}
+
+/* Foco visible en el color de la marca (teclado y lectores de pantalla). */
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
+@utility page-title {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--color-brand);
 }
